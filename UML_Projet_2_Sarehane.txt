@@ -1,0 +1,122 @@
+@startuml
+hide circle
+class Distributeur {
+  Nom : varchar {key}
+}
+class Film{
+  Titre : varchar {key}
+  Date_Sortie: date
+  Age_min: integer
+  Genre : varchar
+}
+
+Distributeur  *-- "1..*" Film : Distribue
+
+class Contributeur {
+  Id_Contrib : int {key}
+  Nom : varchar
+  Prénom : integer
+}
+
+class Realisateur {
+}
+class Producteur {
+}
+
+Contributeur <|-- Producteur
+Contributeur <|-- Realisateur
+
+Contributeur "1..*" -- "1..*" Film : Contribue
+
+class Projection {
+  Id_Proj : int {key}
+  Date : date
+  Heure : int
+  Langue : Langue
+  }
+
+Projection "1..*" -- "1" Film : Projette
+
+Enum Langue {
+  VO
+  VOSTFR
+  VF
+}
+
+Projection .. Langue
+
+class Salle {
+Numéro : integer {key}
+Nbr_Places : integer
+}
+
+Projection "1" -- "1" Salle : Projetté dans
+
+abstract class Entrée {
+Num_Entrée : varchar {key}
+}
+
+class Ticket {
+  Tarif : Tarif
+}
+
+Enum Tarif {
+  Adulte
+  Enfant
+  Etudiant
+  Dimanche
+}
+
+Ticket .. Tarif
+
+class Abonnement{
+}
+
+Entrée <|-- Ticket
+Entrée <|-- Abonnement
+
+Salle "1" -- "0..N" Entrée : Place
+
+class Spectateur {
+  Id_Spec : varchar {key}
+}
+
+class Spectateur_Abo {
+  Adresse_mail : varchar
+  Dernier_Rechargement : Date
+  Solde : Integer
+}
+
+Spectateur <|-- Spectateur_Abo
+
+class Note_Spec {
+  Note : Integer [0;5]
+}
+
+Projection "1" -- "1" Spectateur : Regarde
+Entrée "1..N" -- "1" Spectateur : Achète
+Note_Spec "1" -- "1" Spectateur : Note_Donne
+Note_Spec "0..*" -- "1" Film : Moyenne
+
+class Vendeur {
+Id_Ciné : varchar {key}
+}
+
+class Produits {
+Nom : varchar {key}
+Prix : float
+}
+
+Produits "0..*" -- "1" Vendeur : Vend
+Entrée "0..*" -- "1" Vendeur : Vend
+Produits "0..*" -- "1" Spectateur : Achète
+class Boisson {
+}
+
+class Alimentaire {
+}
+
+Produits <|-- Boisson
+Produits <|-- Alimentaire
+
+@enduml
